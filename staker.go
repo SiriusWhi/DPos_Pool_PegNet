@@ -59,34 +59,6 @@ func main() {
 			fmt.Println(o2.Assets)
 			fmt.Println("")
 		}
-
-		var uniqueList []StakerType
-		for _, staker := range stakers {
-			isExist := false
-			for _, unique := range uniqueList {
-				if unique.staker == staker {
-					isExist = true
-					break
-				}
-			}
-			if !isExist {
-				var item StakerType
-				item.staker = staker
-				item.count = 0
-				uniqueList = append(uniqueList, item)
-			}
-		}
-
-		for i, uniqueItem := range uniqueList {
-			count := 0
-			for _, staker := range stakers {
-				if uniqueItem.staker == staker {
-					count ++
-				}
-			}
-			uniqueList[i].count = int64(count)
-		}
-		fmt.Println(height, uniqueList)
 	}
 }
 
