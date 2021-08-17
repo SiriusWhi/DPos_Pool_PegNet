@@ -26,7 +26,7 @@ func main() {
 		fmt.Println("factom height is not getting correctly")
 	}
 	// 194277
-	for height := 194285; height <= int(heights.DirectoryBlock); height++ {
+	for height := 194286; height <= int(heights.DirectoryBlock); height++ {
 		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
 		dblock := new(factom.DBlock)
 		dblock.Height = uint32(height)
