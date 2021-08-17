@@ -103,8 +103,7 @@ func main() {
 
 				err2 := primitives.VerifySignature([]byte("FA3HMCoF8hPcPKhPNAgn9NTPxspkqcmZQ7HoAvYDmDW4GQuMbMmB"), pubKeyOfDelegator[:], signDataOfDelegator[:])
 				if err2 != nil {
-					fmt.Printf("%v \n", err2)
-					fmt.Errorf("Invalid signature")
+					fmt.Errorf("Invalid signature", err2)
 					//return nil, NewValidateError("Invalid signature")
 					break
 				}
