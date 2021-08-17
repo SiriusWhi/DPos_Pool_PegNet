@@ -107,7 +107,7 @@ func main() {
 					//return nil, NewValidateError("Invalid signature")
 					break
 				}
-				fmt.Println("Second Signature Verification is done.", addressOfDelegator)
+				fmt.Println("Second Signature Verification is done.", string(addressOfDelegator[:]))
 			}
 		}
 	}
