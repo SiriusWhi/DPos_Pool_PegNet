@@ -93,14 +93,13 @@ func main() {
 			}
 			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 
-			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 			for bI := 0; bI < len(dSignatureContents); bI += 96 {
 				delegator := dSignatureContents[bI : bI+96]
 				fmt.Println(delegator)
 				pubKeyOfDelegator := delegator[:32]
 				signDataOfDelegator := delegator[32:]
-				fmt.Println(pubKeyOfDelegator)
-				fmt.Println(signDataOfDelegator)
+				fmt.Println("==> pubKeyOfDelegator: ", pubKeyOfDelegator)
+				fmt.Println("==> signDataOfDelegator: ", signDataOfDelegator)
 
 				err2 := primitives.VerifySignature([]byte("FA3HMCoF8hPcPKhPNAgn9NTPxspkqcmZQ7HoAvYDmDW4GQuMbMmB"), pubKeyOfDelegator[:], signDataOfDelegator[:])
 				if err2 != nil {
