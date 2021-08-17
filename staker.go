@@ -64,20 +64,20 @@ func main() {
 			Validations
 			*/
 			if len(extids) != 5 {
-				fmt.Errorf("Invalid extid count")
+				fmt.Println("Invalid extid count")
 				//return nil, NewValidateError("Invalid extid count")
 				break
 			}
 
 			if len(extids[0]) != 1 || extids[0][0] != 7 {
-				fmt.Errorf("Invalid version")
+				fmt.Println("Invalid version")
 				//return nil, NewValidateError("Invalid version")
 				break
 			}
 			// Verify Signature
 			dSignatureContents := extids[3]
 			if len(extids[4]) != 96 {
-				fmt.Errorf("Invalid signature length")
+				fmt.Println("Invalid signature length")
 				//return nil, NewValidateError("Invalid signature length")
 				break
 			}
@@ -87,7 +87,7 @@ func main() {
 			err2 := primitives.VerifySignature(dSignatureContents, pubKey[:], signData[:])
 			if err2 != nil {
 				fmt.Printf("%v \n", err2)
-				fmt.Errorf("Invalid signature")
+				fmt.Println("Invalid signature")
 				//return nil, NewValidateError("Invalid signature")
 				break
 			}
@@ -103,7 +103,8 @@ func main() {
 
 				err2 := primitives.VerifySignature([]byte("FA3HMCoF8hPcPKhPNAgn9NTPxspkqcmZQ7HoAvYDmDW4GQuMbMmB"), pubKeyOfDelegator[:], signDataOfDelegator[:])
 				if err2 != nil {
-					fmt.Errorf("Invalid signature", err2)
+					fmt.Printf("%v \n", err2)
+					fmt.Println("Invalid signature")
 					//return nil, NewValidateError("Invalid signature")
 					break
 				}
