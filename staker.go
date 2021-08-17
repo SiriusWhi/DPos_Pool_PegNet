@@ -96,6 +96,17 @@ func main() {
 			for bI := 0; bI < len(dSignatureContents); bI += 96 {
 				delegator := dSignatureContents[bI : bI+96]
 				fmt.Println(delegator)
+				pubKeyOfDelegator := delegator[:32]
+				signDataOfDelegator := delegator[32:]
+
+				err2 := primitives.VerifySignature([]byte("FA3HMCoF8hPcPKhPNAgn9NTPxspkqcmZQ7HoAvYDmDW4GQuMbMmB"), pubKeyOfDelegator[:], signDataOfDelegator[:])
+				if err2 != nil {
+					fmt.Printf("%v \n", err2)
+					fmt.Errorf("Invalid signature")
+					//return nil, NewValidateError("Invalid signature")
+					break
+				}
+				fmt.Println("Second Signature Verification is done.")
 			}
 		}
 	}
