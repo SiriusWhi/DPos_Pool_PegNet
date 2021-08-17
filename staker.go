@@ -98,6 +98,8 @@ func main() {
 				fmt.Println(delegator)
 				pubKeyOfDelegator := delegator[:32]
 				signDataOfDelegator := delegator[32:]
+				fmt.Println(pubKeyOfDelegator)
+				fmt.Println(signDataOfDelegator)
 
 				err2 := primitives.VerifySignature([]byte("FA3HMCoF8hPcPKhPNAgn9NTPxspkqcmZQ7HoAvYDmDW4GQuMbMmB"), pubKeyOfDelegator[:], signDataOfDelegator[:])
 				if err2 != nil {
