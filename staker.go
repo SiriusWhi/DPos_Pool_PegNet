@@ -91,6 +91,7 @@ func main() {
 				//return nil, NewValidateError("Invalid signature")
 				break
 			}
+			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 
 			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 			for bI := 0; bI < len(dSignatureContents); bI += 96 {
