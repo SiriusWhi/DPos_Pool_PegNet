@@ -31,14 +31,19 @@ func main() {
 		dblock := new(factom.DBlock)
 		dblock.Height = uint32(height)
 
+		fmt.Println("[debug005]")
 		if err := dblock.Get(nil, cl); err != nil {
+			fmt.Println("[debug006]")
 			fmt.Println("error: ", err)
 			return
 		}
+		fmt.Println("[debug007]")
 
 		sprEBlock := dblock.EBlock(SPRChain)
 		if sprEBlock != nil {
+			fmt.Println("[debug008]")
 			if err := multiFetch2(sprEBlock, cl); err != nil {
+				fmt.Println("[debug009]")
 				fmt.Println("error: ", err)
 				return
 			}
