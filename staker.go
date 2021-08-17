@@ -47,6 +47,9 @@ func main() {
 				fmt.Println("error: ", err)
 				return
 			}
+		} else {
+			fmt.Println("[debug010]")
+			return
 		}
 		if sprEBlock.Entries == nil {
 			fmt.Println("No Entries in SPR")
