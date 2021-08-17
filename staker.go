@@ -11,11 +11,6 @@ var (
 	SPRChain = factom.NewBytes32("e3b1668158026b2450d123ba993aca5367a8b96c6018f63640101a28b8ab5bc7")
 )
 
-type StakerType struct {
-	staker string
-	count  int64
-}
-
 func main() {
 	cl := factom.NewClient()
 	cl.FactomdServer = "http://localhost:8088/v2"
@@ -25,54 +20,37 @@ func main() {
 	if err != nil {
 		fmt.Println("factom height is not getting correctly")
 	}
-	// 194277
 	for height := 194000; height <= int(heights.DirectoryBlock); height++ {
-		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
+		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
 		dblock := new(factom.DBlock)
 		dblock.Height = uint32(height)
 
-		fmt.Println("[debug005]")
 		if err := dblock.Get(nil, cl); err != nil {
-			fmt.Println("[debug006]")
 			fmt.Println("error: ", err)
 			return
 		}
-		fmt.Println("[debug007]")
 
 		sprEBlock := dblock.EBlock(SPRChain)
 		if sprEBlock != nil {
-			fmt.Println("[debug008]")
 			if err := multiFetch2(sprEBlock, cl); err != nil {
-				fmt.Println("[debug009]")
 				fmt.Println("error: ", err)
 				return
 			}
 		} else {
-			fmt.Println("[debug010]")
-			return
-		}
-		if sprEBlock.Entries == nil {
-			fmt.Println("No Entries in SPR")
 			return
 		}
 		for i, entry := range sprEBlock.Entries {
-			fmt.Println("[debug001]")
 			extids := make([][]byte, len(entry.ExtIDs))
-			fmt.Println("[debug002]")
 			for i := range entry.ExtIDs {
 				extids[i] = entry.ExtIDs[i]
 			}
-			fmt.Println("[debug003]")
 
 			o2, err := spr.ParseS1Content(entry.Content)
-			fmt.Println("[debug004]")
 			if err != nil {
 				fmt.Println("parsing error...", err)
 			}
-			fmt.Println("[debug005]")
 			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
 			//fmt.Println(extids)
-			//fmt.Println("")
 
 			/**
 			Validations
@@ -105,7 +83,6 @@ func main() {
 				//return nil, NewValidateError("Invalid signature")
 				break
 			}
-			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 
 			for bI := 0; bI < len(dSignatureContents); bI += 148 {
 				delegator := dSignatureContents[bI : bI+148]
@@ -113,9 +90,6 @@ func main() {
 				addressOfDelegator := delegator[:52]
 				signDataOfDelegator := delegator[52:116]
 				pubKeyOfDelegator := delegator[116:]
-				fmt.Println("==> addressOfDelegator: ", addressOfDelegator)
-				fmt.Println("==> pubKeyOfDelegator: ", pubKeyOfDelegator)
-				fmt.Println("==> signDataOfDelegator: ", signDataOfDelegator)
 
 				err2 := primitives.VerifySignature([]byte(o2.Address), pubKeyOfDelegator[:], signDataOfDelegator[:])
 				if err2 != nil {
