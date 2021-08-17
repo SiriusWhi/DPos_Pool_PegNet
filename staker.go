@@ -26,7 +26,7 @@ func main() {
 		fmt.Println("factom height is not getting correctly")
 	}
 	// 194277
-	for height := 194278; height <= int(heights.DirectoryBlock); height++ {
+	for height := 194285; height <= int(heights.DirectoryBlock); height++ {
 		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
 		dblock := new(factom.DBlock)
 		dblock.Height = uint32(height)
@@ -96,8 +96,10 @@ func main() {
 			for bI := 0; bI < len(dSignatureContents); bI += 96 {
 				delegator := dSignatureContents[bI : bI+96]
 				fmt.Println(delegator)
-				signDataOfDelegator := delegator[:64]
-				pubKeyOfDelegator := delegator[64:]
+				addressOfDelegator := delegator[:52]
+				signDataOfDelegator := delegator[52:116]
+				pubKeyOfDelegator := delegator[116:]
+				fmt.Println("==> addressOfDelegator: ", addressOfDelegator)
 				fmt.Println("==> pubKeyOfDelegator: ", pubKeyOfDelegator)
 				fmt.Println("==> signDataOfDelegator: ", signDataOfDelegator)
 
@@ -108,7 +110,7 @@ func main() {
 					//return nil, NewValidateError("Invalid signature")
 					break
 				}
-				fmt.Println("Second Signature Verification is done.")
+				fmt.Println("Second Signature Verification is done.", addressOfDelegator)
 			}
 		}
 	}
