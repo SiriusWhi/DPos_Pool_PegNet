@@ -48,15 +48,20 @@ func main() {
 			return
 		}
 		for i, entry := range sprEBlock.Entries {
+			fmt.Println("[debug001]")
 			extids := make([][]byte, len(entry.ExtIDs))
+			fmt.Println("[debug002]")
 			for i := range entry.ExtIDs {
 				extids[i] = entry.ExtIDs[i]
 			}
+			fmt.Println("[debug003]")
 
 			o2, err := spr.ParseS1Content(entry.Content)
+			fmt.Println("[debug004]")
 			if err != nil {
 				fmt.Println("parsing error...", err)
 			}
+			fmt.Println("[debug005]")
 			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
 			//fmt.Println(extids)
 			//fmt.Println("")
