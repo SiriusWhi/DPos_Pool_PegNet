@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/Factom-Asset-Tokens/factom"
+	"github.com/FactomProject/factomd/common/primitives"
 	"github.com/pegnet/pegnet/modules/spr"
 )
 
@@ -24,7 +25,7 @@ func main() {
 	if err != nil {
 		fmt.Println("factom height is not getting correctly")
 	}
-
+	// 194277
 	for height := 194269; height <= int(heights.DirectoryBlock); height++ {
 		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
 		dblock := new(factom.DBlock)
@@ -58,6 +59,40 @@ func main() {
 			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
 			fmt.Println(extids)
 			fmt.Println("")
+
+			/**
+			Validations
+			*/
+			if len(extids) != 5 {
+				fmt.Errorf("Invalid extid count")
+				//return nil, NewValidateError("Invalid extid count")
+				break
+			}
+
+			if len(extids[0]) != 1 || extids[0][0] != 7 {
+				fmt.Errorf("Invalid version")
+				//return nil, NewValidateError("Invalid version")
+				break
+			}
+			// Verify Signature
+			dSignatureContents := extids[3]
+			if len(extids[4]) != 96 {
+				fmt.Errorf("Invalid signature length")
+				//return nil, NewValidateError("Invalid signature length")
+				break
+			}
+			pubKey := extids[4][:32]
+			signData := extids[4][32:]
+
+			err2 := primitives.VerifySignature(dSignatureContents, pubKey[:], signData[:])
+			if err2 != nil {
+				fmt.Printf("%v \n", err2)
+				fmt.Errorf("Invalid signature")
+				//return nil, NewValidateError("Invalid signature")
+				break
+			}
+
+			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 		}
 	}
 }
