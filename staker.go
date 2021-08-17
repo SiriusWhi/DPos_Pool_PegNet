@@ -36,69 +36,68 @@ func main() {
 				fmt.Println("error: ", err)
 				return
 			}
-		} else {
-			return
-		}
-		for i, entry := range sprEBlock.Entries {
-			extids := make([][]byte, len(entry.ExtIDs))
-			for i := range entry.ExtIDs {
-				extids[i] = entry.ExtIDs[i]
-			}
 
-			o2, err := spr.ParseS1Content(entry.Content)
-			if err != nil {
-				fmt.Println("parsing error...", err)
-			}
-			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
-			//fmt.Println(extids)
+			for i, entry := range sprEBlock.Entries {
+				extids := make([][]byte, len(entry.ExtIDs))
+				for i := range entry.ExtIDs {
+					extids[i] = entry.ExtIDs[i]
+				}
 
-			/**
-			Validations
-			*/
-			if len(extids) != 5 {
-				fmt.Println("Invalid extid count")
-				//return nil, NewValidateError("Invalid extid count")
-				break
-			}
+				o2, err := spr.ParseS1Content(entry.Content)
+				if err != nil {
+					fmt.Println("parsing error...", err)
+				}
+				fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
+				//fmt.Println(extids)
 
-			if len(extids[0]) != 1 || extids[0][0] != 7 {
-				fmt.Println("Invalid version")
-				//return nil, NewValidateError("Invalid version")
-				break
-			}
-			// Verify Signature
-			dSignatureContents := extids[3]
-			if len(extids[4]) != 96 {
-				fmt.Println("Invalid signature length")
-				//return nil, NewValidateError("Invalid signature length")
-				break
-			}
-			pubKey := extids[4][:32]
-			signData := extids[4][32:]
+				/**
+				Validations
+				*/
+				if len(extids) != 5 {
+					fmt.Println("Invalid extid count")
+					//return nil, NewValidateError("Invalid extid count")
+					break
+				}
 
-			err2 := primitives.VerifySignature(dSignatureContents, pubKey[:], signData[:])
-			if err2 != nil {
-				fmt.Printf("%v \n", err2)
-				fmt.Println("Invalid signature")
-				//return nil, NewValidateError("Invalid signature")
-				break
-			}
+				if len(extids[0]) != 1 || extids[0][0] != 7 {
+					fmt.Println("Invalid version")
+					//return nil, NewValidateError("Invalid version")
+					break
+				}
+				// Verify Signature
+				dSignatureContents := extids[3]
+				if len(extids[4]) != 96 {
+					fmt.Println("Invalid signature length")
+					//return nil, NewValidateError("Invalid signature length")
+					break
+				}
+				pubKey := extids[4][:32]
+				signData := extids[4][32:]
 
-			for bI := 0; bI < len(dSignatureContents); bI += 148 {
-				delegator := dSignatureContents[bI : bI+148]
-				fmt.Println(delegator)
-				addressOfDelegator := delegator[:52]
-				signDataOfDelegator := delegator[52:116]
-				pubKeyOfDelegator := delegator[116:]
-
-				err2 := primitives.VerifySignature([]byte(o2.Address), pubKeyOfDelegator[:], signDataOfDelegator[:])
+				err2 := primitives.VerifySignature(dSignatureContents, pubKey[:], signData[:])
 				if err2 != nil {
 					fmt.Printf("%v \n", err2)
 					fmt.Println("Invalid signature")
 					//return nil, NewValidateError("Invalid signature")
 					break
 				}
-				fmt.Println("Second Signature Verification is done.", string(addressOfDelegator[:]))
+
+				for bI := 0; bI < len(dSignatureContents); bI += 148 {
+					delegator := dSignatureContents[bI : bI+148]
+					fmt.Println(delegator)
+					addressOfDelegator := delegator[:52]
+					signDataOfDelegator := delegator[52:116]
+					pubKeyOfDelegator := delegator[116:]
+
+					err2 := primitives.VerifySignature([]byte(o2.Address), pubKeyOfDelegator[:], signDataOfDelegator[:])
+					if err2 != nil {
+						fmt.Printf("%v \n", err2)
+						fmt.Println("Invalid signature")
+						//return nil, NewValidateError("Invalid signature")
+						break
+					}
+					fmt.Println("Second Signature Verification is done.", string(addressOfDelegator[:]))
+				}
 			}
 		}
 	}
