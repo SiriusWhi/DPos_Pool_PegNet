@@ -43,7 +43,6 @@ func main() {
 				return
 			}
 		}
-		var stakers []string
 		for i, entry := range sprEBlock.Entries {
 			extids := make([][]byte, len(entry.ExtIDs))
 			for i := range entry.ExtIDs {
@@ -54,8 +53,6 @@ func main() {
 			if err != nil {
 				fmt.Println("parsing error...", err)
 			}
-			//fmt.Println("FactomID:", o.GetID())
-			stakers = append(stakers, o2.Address)
 			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
 			//fmt.Println(extids)
 			//fmt.Println("")
