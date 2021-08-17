@@ -96,8 +96,8 @@ func main() {
 			for bI := 0; bI < len(dSignatureContents); bI += 96 {
 				delegator := dSignatureContents[bI : bI+96]
 				fmt.Println(delegator)
-				pubKeyOfDelegator := delegator[:32]
-				signDataOfDelegator := delegator[32:]
+				signDataOfDelegator := delegator[:64]
+				pubKeyOfDelegator := delegator[64:]
 				fmt.Println("==> pubKeyOfDelegator: ", pubKeyOfDelegator)
 				fmt.Println("==> signDataOfDelegator: ", signDataOfDelegator)
 
