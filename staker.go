@@ -43,6 +43,10 @@ func main() {
 				return
 			}
 		}
+		if sprEBlock.Entries == nil {
+			fmt.Println("No Entries in SPR")
+			return
+		}
 		for i, entry := range sprEBlock.Entries {
 			extids := make([][]byte, len(entry.ExtIDs))
 			for i := range entry.ExtIDs {
