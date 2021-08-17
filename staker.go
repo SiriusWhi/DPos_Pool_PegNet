@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	SPRChain                              = factom.NewBytes32("e3b1668158026b2450d123ba993aca5367a8b96c6018f63640101a28b8ab5bc7")
+	SPRChain = factom.NewBytes32("e3b1668158026b2450d123ba993aca5367a8b96c6018f63640101a28b8ab5bc7")
 )
 
 type StakerType struct {
 	staker string
-	count int64
+	count  int64
 }
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 		fmt.Println("factom height is not getting correctly")
 	}
 
-	for height:=194269; height <= int(heights.DirectoryBlock); height++ {
+	for height := 194269; height <= int(heights.DirectoryBlock); height++ {
 		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
 		dblock := new(factom.DBlock)
 		dblock.Height = uint32(height)
@@ -56,12 +56,11 @@ func main() {
 			//fmt.Println("FactomID:", o.GetID())
 			stakers = append(stakers, o2.Address)
 			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
-			fmt.Println(o2.Assets)
+			fmt.Println(extids)
 			fmt.Println("")
 		}
 	}
 }
-
 
 func multiFetch2(eblock *factom.EBlock, c *factom.Client) error {
 	err := eblock.Get(nil, c)
