@@ -90,8 +90,8 @@ func main() {
 			}
 			fmt.Println("First signature verification is done. Data: ", dSignatureContents)
 
-			for bI := 0; bI < len(dSignatureContents); bI += 96 {
-				delegator := dSignatureContents[bI : bI+96]
+			for bI := 0; bI < len(dSignatureContents); bI += 148 {
+				delegator := dSignatureContents[bI : bI+148]
 				fmt.Println(delegator)
 				addressOfDelegator := delegator[:52]
 				signDataOfDelegator := delegator[52:116]
