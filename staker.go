@@ -26,7 +26,7 @@ func main() {
 		fmt.Println("factom height is not getting correctly")
 	}
 	// 194277
-	for height := 194269; height <= int(heights.DirectoryBlock); height++ {
+	for height := 194277; height <= int(heights.DirectoryBlock); height++ {
 		fmt.Println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%", height)
 		dblock := new(factom.DBlock)
 		dblock.Height = uint32(height)
@@ -57,8 +57,8 @@ func main() {
 			//fmt.Println("FactomID:", o.GetID())
 			stakers = append(stakers, o2.Address)
 			fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
-			fmt.Println(extids)
-			fmt.Println("")
+			//fmt.Println(extids)
+			//fmt.Println("")
 
 			/**
 			Validations
