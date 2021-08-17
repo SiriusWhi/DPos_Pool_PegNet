@@ -101,7 +101,7 @@ func main() {
 				fmt.Println("==> pubKeyOfDelegator: ", pubKeyOfDelegator)
 				fmt.Println("==> signDataOfDelegator: ", signDataOfDelegator)
 
-				err2 := primitives.VerifySignature([]byte("FA3HMCoF8hPcPKhPNAgn9NTPxspkqcmZQ7HoAvYDmDW4GQuMbMmB"), pubKeyOfDelegator[:], signDataOfDelegator[:])
+				err2 := primitives.VerifySignature([]byte(o2.Address), pubKeyOfDelegator[:], signDataOfDelegator[:])
 				if err2 != nil {
 					fmt.Printf("%v \n", err2)
 					fmt.Println("Invalid signature")
