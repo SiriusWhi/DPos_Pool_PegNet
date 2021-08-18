@@ -74,8 +74,9 @@ func main() {
 				if errP != nil && len(extids) == 5 && len(extids[0]) == 1 && extids[0][0] == 8 {
 					listOfDelegatorsAddress, err := getDelegatorsAddress(extids[3], extids[4], o2.Address)
 					if err != nil {
-						fmt.Println("listOfDelegatorsAddress:", listOfDelegatorsAddress)
+						continue
 					}
+					fmt.Println("listOfDelegatorsAddress:", listOfDelegatorsAddress)
 				}
 			}
 			/*
