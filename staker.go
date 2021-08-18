@@ -11,6 +11,34 @@ var (
 	SPRChain = factom.NewBytes32("e3b1668158026b2450d123ba993aca5367a8b96c6018f63640101a28b8ab5bc7")
 )
 
+func getDelegatorsAddress(delegatorData []byte, signature []byte, signer string) ([]string, error) {
+	if len(signature) != 96 {
+		return nil, fmt.Errorf("Invalid signature length")
+	}
+	dPubKey := signature[:32]
+	dSignData := signature[32:]
+
+	err3 := primitives.VerifySignature(delegatorData, dPubKey[:], dSignData[:])
+	if err3 != nil {
+		return nil, fmt.Errorf("Invalid signature")
+	}
+
+	var listOfDelegatorsAddress []string
+	for bI := 0; bI < len(delegatorData); bI += 148 {
+		delegator := delegatorData[bI : bI+148]
+		addressOfDelegator := delegator[:52]
+		signDataOfDelegator := delegator[52:116]
+		pubKeyOfDelegator := delegator[116:]
+
+		err2 := primitives.VerifySignature([]byte(signer), pubKeyOfDelegator[:], signDataOfDelegator[:])
+		if err2 != nil {
+			continue
+		}
+		listOfDelegatorsAddress = append(listOfDelegatorsAddress, string(addressOfDelegator[:]))
+	}
+	return listOfDelegatorsAddress, nil
+}
+
 func main() {
 	cl := factom.NewClient()
 	cl.FactomdServer = "http://localhost:8088/v2"
@@ -65,39 +93,11 @@ func main() {
 					break
 				}
 				// Verify Signature
-				dSignatureContents := extids[3]
-				if len(extids[4]) != 96 {
-					fmt.Println("Invalid signature length")
-					//return nil, NewValidateError("Invalid signature length")
+				listOfDelegatorsAddress, err := getDelegatorsAddress(extids[3], extids[4], o2.Address)
+				if err != nil {
 					break
 				}
-				pubKey := extids[4][:32]
-				signData := extids[4][32:]
-
-				err2 := primitives.VerifySignature(dSignatureContents, pubKey[:], signData[:])
-				if err2 != nil {
-					fmt.Printf("%v \n", err2)
-					fmt.Println("Invalid signature")
-					//return nil, NewValidateError("Invalid signature")
-					break
-				}
-
-				for bI := 0; bI < len(dSignatureContents); bI += 148 {
-					delegator := dSignatureContents[bI : bI+148]
-					fmt.Println(delegator)
-					addressOfDelegator := delegator[:52]
-					signDataOfDelegator := delegator[52:116]
-					pubKeyOfDelegator := delegator[116:]
-
-					err2 := primitives.VerifySignature([]byte(o2.Address), pubKeyOfDelegator[:], signDataOfDelegator[:])
-					if err2 != nil {
-						fmt.Printf("%v \n", err2)
-						fmt.Println("Invalid signature")
-						//return nil, NewValidateError("Invalid signature")
-						break
-					}
-					fmt.Println("Second Signature Verification is done.", string(addressOfDelegator[:]))
-				}
+				fmt.Println("listOfDelegatorsAddress:", listOfDelegatorsAddress)
 			}
 		}
 	}
