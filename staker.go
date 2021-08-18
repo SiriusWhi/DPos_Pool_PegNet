@@ -71,7 +71,7 @@ func main() {
 					extids[i] = entry.ExtIDs[i]
 				}
 				o2, errP := spr.ParseS1Content(entry.Content)
-				if errP == nil && len(extids) == 5 {
+				if errP == nil && len(extids) == 5 && len(extids[0]) == 1 && extids[0][0] == 8 {
 					listOfDelegatorsAddress, err := getDelegatorsAddress(extids[3], extids[4], o2.Address)
 					if err != nil {
 						continue
