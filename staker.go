@@ -65,40 +65,54 @@ func main() {
 				return
 			}
 
-			for i, entry := range sprEBlock.Entries {
+			for _, entry := range sprEBlock.Entries {
 				extids := make([][]byte, len(entry.ExtIDs))
 				for i := range entry.ExtIDs {
 					extids[i] = entry.ExtIDs[i]
 				}
-
-				o2, err := spr.ParseS1Content(entry.Content)
-				if err != nil {
-					fmt.Println("parsing error...", err)
+				o2, errP := spr.ParseS1Content(entry.Content)
+				if errP != nil && len(extids) == 5 && len(extids[0]) == 1 && extids[0][0] == 8 {
+					listOfDelegatorsAddress, err := getDelegatorsAddress(extids[3], extids[4], o2.Address)
+					if err != nil {
+						fmt.Println("listOfDelegatorsAddress:", listOfDelegatorsAddress)
+					}
 				}
-				fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
-				//fmt.Println(extids)
-
-				/**
-				Validations
-				*/
-				if len(extids) != 5 {
-					fmt.Println("Invalid extid count")
-					//return nil, NewValidateError("Invalid extid count")
-					break
-				}
-
-				if len(extids[0]) != 1 || extids[0][0] != 7 {
-					fmt.Println("Invalid version")
-					//return nil, NewValidateError("Invalid version")
-					break
-				}
-				// Verify Signature
-				listOfDelegatorsAddress, err := getDelegatorsAddress(extids[3], extids[4], o2.Address)
-				if err != nil {
-					break
-				}
-				fmt.Println("listOfDelegatorsAddress:", listOfDelegatorsAddress)
 			}
+			/*
+				for i, entry := range sprEBlock.Entries {
+					extids := make([][]byte, len(entry.ExtIDs))
+					for i := range entry.ExtIDs {
+						extids[i] = entry.ExtIDs[i]
+					}
+
+					o2, err := spr.ParseS1Content(entry.Content)
+					if err != nil {
+						fmt.Println("parsing error...", err)
+					}
+					fmt.Println("staker", i, ": ", o2.Address, "================================================================================")
+					//fmt.Println(extids)
+
+
+					// Validations
+
+					if len(extids) != 5 {
+						fmt.Println("Invalid extid count")
+						//return nil, NewValidateError("Invalid extid count")
+						break
+					}
+
+					if len(extids[0]) != 1 || extids[0][0] != 7 {
+						fmt.Println("Invalid version")
+						//return nil, NewValidateError("Invalid version")
+						break
+					}
+					// Verify Signature
+					listOfDelegatorsAddress, err := getDelegatorsAddress(extids[3], extids[4], o2.Address)
+					if err != nil {
+						break
+					}
+					fmt.Println("listOfDelegatorsAddress:", listOfDelegatorsAddress)
+				}*/
 		}
 	}
 }
